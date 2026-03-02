@@ -8,6 +8,7 @@ cooldown = 0
 webcam = cv2.VideoCapture(0)
 webcam.set(3, 640)
 webcam.set(4, 480)
+prev_time = 0
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
@@ -55,6 +56,9 @@ while True:
     cv2.imshow("Hand Volume Control", image)
     if cv2.waitKey(1) & 0xFF == 27:
         break
+    current_time = time.time()
+    fps = 1/(current_time - prev_time) if prev_time != 0 else 0
+    prev_time = current_time
 
 webcam.release()
 cv2.destroyAllWindows()
