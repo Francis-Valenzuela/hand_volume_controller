@@ -25,12 +25,12 @@ while True:
 
     image = cv2.flip(img, 1)
     frame_height, frame_width, _ = img.shape
-    rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     results = hands.process(rgb)
 
     if results.multi_hand_landmarks:
         for hand in results.multi_hand_landmarks:
-            drawing_utils.draw_landmarks(image, hand.landmark, mp_hands.HAND_CONNECTIONS)
+            drawing_utils.draw_landmarks(image, hand, mp_hands.HAND_CONNECTIONS)
 
             landmarks = hand.landmark
 
@@ -45,7 +45,7 @@ while True:
 
             distance = ((x2 - x1)**2 + (y2 - y1)**2) ** 0.5
 
-            if time.time() - cd > 0.05:
+            if time.time() - cooldown > 0.05:
                 if distance > 80:
                     pyautogui.press("volumeup")
                     cooldown = time.time()
@@ -55,6 +55,6 @@ while True:
     cv2.imshow("Hand Volume Control", image)
     if cv2.waitKey(1) & 0xFF == 27:
         break
-        
+
 webcam.release()
 cv2.destroyAllWindows()
